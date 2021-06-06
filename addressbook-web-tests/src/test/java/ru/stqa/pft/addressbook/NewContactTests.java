@@ -24,12 +24,21 @@ public class NewContactTests {
   @Test
   public void testNewContactTests() throws Exception {
     driver.get("http://localhost/addressbook/addressbook/edit.php");
-    driver.findElement(By.name("user")).clear();
-    driver.findElement(By.name("user")).sendKeys("admin");
-    driver.findElement(By.name("pass")).click();
-    driver.findElement(By.name("pass")).clear();
-    driver.findElement(By.name("pass")).sendKeys("secret");
-    driver.findElement(By.xpath("//input[@value='Login']")).click();
+    login();
+    fillNewContactForm();
+    submitNewContactCreation();
+    logout();
+  }
+
+  private void logout() {
+    driver.findElement(By.linkText("Logout")).click();
+  }
+
+  private void submitNewContactCreation() {
+    driver.findElement(By.xpath("(//input[@name='submit'])[2]")).click();
+  }
+
+  private void fillNewContactForm() {
     driver.findElement(By.name("firstname")).click();
     driver.findElement(By.name("firstname")).clear();
     driver.findElement(By.name("firstname")).sendKeys("Ivan");
@@ -61,8 +70,15 @@ public class NewContactTests {
     driver.findElement(By.name("company")).click();
     driver.findElement(By.name("company")).clear();
     driver.findElement(By.name("company")).sendKeys("Amazon");
-    driver.findElement(By.xpath("(//input[@name='submit'])[2]")).click();
-    driver.findElement(By.linkText("Logout")).click();
+  }
+
+  private void login() {
+    driver.findElement(By.name("user")).clear();
+    driver.findElement(By.name("user")).sendKeys("admin");
+    driver.findElement(By.name("pass")).click();
+    driver.findElement(By.name("pass")).clear();
+    driver.findElement(By.name("pass")).sendKeys("secret");
+    driver.findElement(By.xpath("//input[@value='Login']")).click();
   }
 
   @AfterClass(alwaysRun = true)
