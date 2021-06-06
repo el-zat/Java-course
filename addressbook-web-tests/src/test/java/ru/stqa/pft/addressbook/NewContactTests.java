@@ -1,6 +1,5 @@
 package ru.stqa.pft.addressbook;
 
-import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
 import org.testng.annotations.*;
 import static org.testng.Assert.*;
@@ -23,11 +22,15 @@ public class NewContactTests {
 
   @Test
   public void testNewContactTests() throws Exception {
-    driver.get("http://localhost/addressbook/addressbook/edit.php");
-    login();
-    fillNewContactForm();
+    gotoNewContactPage();
+    login("admin", "secret");
+    fillNewContactForm(new NewContactData("Ivan", "Ivanov", "Vanya", "322 223 322", "ivan_ivanov@mail.com", "1", "January", "1980", "www.ivanov.org", "Amazon"));
     submitNewContactCreation();
     logout();
+  }
+
+  private void gotoNewContactPage() {
+    driver.get("http://localhost/addressbook/addressbook/edit.php");
   }
 
   private void logout() {
@@ -38,46 +41,46 @@ public class NewContactTests {
     driver.findElement(By.xpath("(//input[@name='submit'])[2]")).click();
   }
 
-  private void fillNewContactForm() {
+  private void fillNewContactForm(NewContactData newContactData) {
     driver.findElement(By.name("firstname")).click();
     driver.findElement(By.name("firstname")).clear();
-    driver.findElement(By.name("firstname")).sendKeys("Ivan");
+    driver.findElement(By.name("firstname")).sendKeys(newContactData.getFirstname());
     driver.findElement(By.name("lastname")).click();
     driver.findElement(By.name("lastname")).clear();
-    driver.findElement(By.name("lastname")).sendKeys("Ivanov");
+    driver.findElement(By.name("lastname")).sendKeys(newContactData.getLastname());
     driver.findElement(By.name("nickname")).click();
     driver.findElement(By.name("nickname")).clear();
-    driver.findElement(By.name("nickname")).sendKeys("Vanya");
+    driver.findElement(By.name("nickname")).sendKeys(newContactData.getNickname());
     driver.findElement(By.name("mobile")).click();
     driver.findElement(By.name("mobile")).clear();
-    driver.findElement(By.name("mobile")).sendKeys("322 223 322");
+    driver.findElement(By.name("mobile")).sendKeys(newContactData.getMobile());
     driver.findElement(By.name("theform")).click();
     driver.findElement(By.name("email")).click();
     driver.findElement(By.name("email")).clear();
-    driver.findElement(By.name("email")).sendKeys("ivan_ivanov@mail.com");
+    driver.findElement(By.name("email")).sendKeys(newContactData.getEmail());
     driver.findElement(By.name("bday")).click();
-    new Select(driver.findElement(By.name("bday"))).selectByVisibleText("1");
+    new Select(driver.findElement(By.name("bday"))).selectByVisibleText(newContactData.getBday());
     driver.findElement(By.name("bday")).click();
     driver.findElement(By.name("bmonth")).click();
-    new Select(driver.findElement(By.name("bmonth"))).selectByVisibleText("January");
+    new Select(driver.findElement(By.name("bmonth"))).selectByVisibleText(newContactData.getBmonth());
     driver.findElement(By.name("bmonth")).click();
     driver.findElement(By.name("byear")).click();
     driver.findElement(By.name("byear")).clear();
-    driver.findElement(By.name("byear")).sendKeys("1980");
+    driver.findElement(By.name("byear")).sendKeys(newContactData.getByear());
     driver.findElement(By.name("homepage")).click();
     driver.findElement(By.name("homepage")).clear();
-    driver.findElement(By.name("homepage")).sendKeys("www.ivanov.org");
+    driver.findElement(By.name("homepage")).sendKeys(newContactData.getHomepage());
     driver.findElement(By.name("company")).click();
     driver.findElement(By.name("company")).clear();
-    driver.findElement(By.name("company")).sendKeys("Amazon");
+    driver.findElement(By.name("company")).sendKeys(newContactData.getCompany());
   }
 
-  private void login() {
+  private void login(String username, String password) {
     driver.findElement(By.name("user")).clear();
-    driver.findElement(By.name("user")).sendKeys("admin");
+    driver.findElement(By.name("user")).sendKeys(username);
     driver.findElement(By.name("pass")).click();
     driver.findElement(By.name("pass")).clear();
-    driver.findElement(By.name("pass")).sendKeys("secret");
+    driver.findElement(By.name("pass")).sendKeys(password);
     driver.findElement(By.xpath("//input[@value='Login']")).click();
   }
 
